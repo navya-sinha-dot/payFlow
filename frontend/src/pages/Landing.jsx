@@ -4,16 +4,14 @@ import { ArrowRight, Shield, Zap, Users } from "lucide-react";
 import Navbar from "@/components/Navbar";
 
 const Landing = () => {
-  const token = localStorage.getItem("token"); // ✅ check if signed in
+  const token = localStorage.getItem("token");
 
   return (
     <div className="min-h-screen bg-black text-white">
-      {/* Navbar */}
       <div data-aos="fade-down" data-aos-delay="100">
         <Navbar />
       </div>
 
-      {/* Hero Section */}
       <section className="pt-24 pb-12 px-4">
         <div className="container mx-auto text-center">
           <div data-aos="fade-up" data-aos-delay="200">
@@ -30,7 +28,6 @@ const Landing = () => {
               data-aos="fade-up"
               data-aos-delay="300"
             >
-              {/* Always show Get Started */}
               <Link to="/signup">
                 <Button
                   size="lg"
@@ -40,7 +37,6 @@ const Landing = () => {
                 </Button>
               </Link>
 
-              {/* ✅ Only show Sign In if user is NOT signed in */}
               {!token && (
                 <Link to="/signin">
                   <Button
@@ -57,7 +53,6 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* Features Section */}
       <section className="py-20 px-4 bg-black">
         <div className="container mx-auto">
           <h2
@@ -123,7 +118,6 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="py-20 px-4 bg-purple-900">
         <div
           className="container mx-auto text-center"
@@ -136,14 +130,6 @@ const Landing = () => {
           <p className="text-xl text-purple-200 mb-8 max-w-2xl mx-auto">
             Join thousands of users who trust PayFlow for their money transfers.
           </p>
-          <Link to="/signup">
-            <Button
-              size="lg"
-              className="bg-purple-600 hover:bg-purple-700 text-white text-lg px-8 py-6"
-            >
-              Create Account <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </Link>
         </div>
       </section>
     </div>
