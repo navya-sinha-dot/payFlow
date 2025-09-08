@@ -4,6 +4,8 @@ import { ArrowRight, Shield, Zap, Users } from "lucide-react";
 import Navbar from "@/components/Navbar";
 
 const Landing = () => {
+  const token = localStorage.getItem("token"); // ✅ check if signed in
+
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Navbar */}
@@ -28,6 +30,7 @@ const Landing = () => {
               data-aos="fade-up"
               data-aos-delay="300"
             >
+              {/* Always show Get Started */}
               <Link to="/signup">
                 <Button
                   size="lg"
@@ -36,15 +39,19 @@ const Landing = () => {
                   Get Started <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
-              <Link to="/signin">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-purple-600 text-purple-400 hover:text-white hover:border-purple-500 text-lg px-8 py-6"
-                >
-                  Sign In
-                </Button>
-              </Link>
+
+              {/* ✅ Only show Sign In if user is NOT signed in */}
+              {!token && (
+                <Link to="/signin">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="border-purple-600 text-purple-400 hover:text-white hover:border-purple-500 hover:bg-purple-400 text-lg px-8 py-6"
+                  >
+                    Sign In
+                  </Button>
+                </Link>
+              )}
             </div>
           </div>
         </div>

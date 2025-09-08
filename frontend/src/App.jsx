@@ -10,9 +10,12 @@ import SignIn from "./pages/SignIn";
 import Dashboard from "./pages/Dashboard";
 import SendMoney from "./pages/SendMoney";
 import NotFound from "./pages/NotFound";
+import ProtectedRoute from "./pages/ProtectedRoutes";
 
 import "aos/dist/aos.css"; // import AOS styles
 import AOS from "aos";
+import CustomCursor from "./components/CustomCursor";
+import UpdateInfo from "./pages/UpdateInfo";
 
 const queryClient = new QueryClient();
 
@@ -22,23 +25,42 @@ const App = () => {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/send" element={<SendMoney />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
+    <div className="cursor-none">
+      <CustomCursor />
+
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Landing />} />
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/signin" element={<SignIn />} />
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/send" element={<SendMoney />} />
+              <Route
+                path="/updateinfo"
+                element={
+                  <ProtectedRoute>
+                    <UpdateInfo />
+                  </ProtectedRoute>
+                }
+              />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </div>
   );
 };
 

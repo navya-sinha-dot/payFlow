@@ -1,14 +1,49 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Search, Send, LogOut, Wallet } from "lucide-react";
+import { Search, Send, Wallet } from "lucide-react";
 import Navbar from "../components/Navbar";
+import axios from "axios";
 
 const Dashboard = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [balance, setBalance] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  // Fetch balance with auth check
+  useEffect(() => {
+    const fetchBalance = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/signin"); // not logged in
+        return;
+      }
+
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/v1/account/balance",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setBalance(response.data.balance);
+      } catch (err) {
+        console.error("Error fetching balance:", err);
+        localStorage.removeItem("token");
+        navigate("/signin");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBalance();
+  }, [navigate]);
 
   const users = [
     { id: "U1", name: "User 1", initials: "U1" },
@@ -23,21 +58,26 @@ const Dashboard = () => {
     user.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-black text-white">
+        <p className="text-lg">Loading Dashboard...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-950 to-black text-white">
       <div>
         <Navbar />
       </div>
       <div className="container mx-auto px-6 pt-28 pb-8">
-        {/* Balance Card */}
         <Card className="mb-8 relative overflow-hidden rounded-2xl shadow-2xl border border-purple-500/40 animate-fade-in mx-8">
-          {/* Gradient background with glow */}
           <div className="absolute inset-0 bg-gradient-to-l from-purple-700 via-purple-800 to-purple-900" />
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10" />
           <div className="absolute -top-20 -right-20 w-60 h-60 bg-purple-500/30 rounded-full blur-3xl" />
 
           <CardContent className="relative p-6 z-10">
-            {/* Header */}
             <div className="flex items-center space-x-3 mb-4">
               <div className="p-3 rounded-xl bg-white/20 backdrop-blur-sm shadow-lg">
                 <Wallet className="h-6 w-6 text-white" />
@@ -47,23 +87,19 @@ const Dashboard = () => {
               </span>
             </div>
 
-            {/* Balance */}
             <div className="text-5xl font-extrabold text-white tracking-tight drop-shadow-sm">
-              $5,000
+              {balance !== null ? `$${balance}` : "Loading..."}
             </div>
 
-            {/* Subtext */}
             <p className="mt-2 text-sm text-purple-200">
               Available across all linked accounts
             </p>
           </CardContent>
         </Card>
 
-        {/* Users Section */}
         <div className="opacity-0 animate-fade-in-up animate-delay-300">
           <h2 className="text-2xl font-bold mb-6 text-white">Users</h2>
 
-          {/* Search Bar */}
           <div className="relative mb-6 opacity-0 animate-fade-in-up animate-delay-400">
             <Search className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
             <Input
@@ -74,7 +110,6 @@ const Dashboard = () => {
             />
           </div>
 
-          {/* Users List */}
           <div className="space-y-3">
             {filteredUsers.map((user, index) => (
               <Card
@@ -98,7 +133,7 @@ const Dashboard = () => {
                       </div>
                     </div>
 
-                    <Link to={`/send?user=${user.id}&name=${user.name}`}>
+                    <Link to={`/send?filter=${user.id}&name=${user.name}`}>
                       <Button className="bg-purple-600 hover:bg-purple-700 text-white">
                         <Send className="h-4 w-4 mr-2" />
                         Send Money

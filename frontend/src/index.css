@@ -32,4 +32,5 @@
 /* Apply default background and text colors */
 body {
   @apply bg-background text-foreground font-sans;
+  cursor: none; /* Hide the default system cursor */
 }

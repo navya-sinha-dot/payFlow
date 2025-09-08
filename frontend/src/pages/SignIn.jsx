@@ -11,6 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ArrowLeft, Mail, Lock } from "lucide-react";
+import axios from "axios";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -18,11 +19,7 @@ const SignIn = () => {
     email: "",
     password: "",
   });
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    navigate("/dashboard");
-  };
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData({
@@ -31,10 +28,34 @@ const SignIn = () => {
     });
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/v1/user/signin",
+        {
+          email: formData.email,
+          password: formData.password,
+        }
+      );
+
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("userEmail", formData.email);
+        navigate("/dashboard");
+      } else {
+        setError(response.data.message || "Login failed");
+      }
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-950 to-black flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Back Link */}
         <Link
           to="/"
           className="inline-flex items-center text-purple-500 hover:text-purple-400 mb-8 transition-colors duration-300 opacity-0 animate-fade-in-up animate-delay-200"
@@ -43,20 +64,16 @@ const SignIn = () => {
           Back to Home
         </Link>
 
-        {/* Card */}
         <Card className="bg-gray-900 border border-gray-700 shadow-xl opacity-0 animate-scale-in">
           <CardHeader className="text-center space-y-2">
-            {/* Icon */}
             <div className="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 opacity-0 animate-fade-in-up animate-delay-300">
               <span className="text-white font-bold text-xl">P</span>
             </div>
 
-            {/* Title */}
             <CardTitle className="text-2xl font-bold text-white opacity-0 animate-fade-in-up animate-delay-400">
               Welcome Back
             </CardTitle>
 
-            {/* Description */}
             <CardDescription className="text-white opacity-0 animate-fade-in-up animate-delay-500">
               Sign in to your PayFlow account
             </CardDescription>
@@ -64,7 +81,6 @@ const SignIn = () => {
 
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Email */}
               <div className="space-y-2 opacity-0 animate-fade-in-up animate-delay-600">
                 <Label htmlFor="email" className="text-white">
                   Email
@@ -84,7 +100,6 @@ const SignIn = () => {
                 </div>
               </div>
 
-              {/* Password */}
               <div className="space-y-2 opacity-0 animate-fade-in-up animate-delay-700">
                 <Label htmlFor="password" className="text-white">
                   Password
@@ -104,7 +119,12 @@ const SignIn = () => {
                 </div>
               </div>
 
-              {/* Forgot password */}
+              {error && (
+                <p className="text-red-500 text-sm opacity-0 animate-fade-in-up animate-delay-800">
+                  {error}
+                </p>
+              )}
+
               <div className="flex items-center justify-between opacity-0 animate-fade-in-up animate-delay-800">
                 <Link
                   to="#"
@@ -114,7 +134,6 @@ const SignIn = () => {
                 </Link>
               </div>
 
-              {/* Sign In Button */}
               <Button
                 type="submit"
                 className="w-full bg-purple-600 hover:bg-purple-700 text-white opacity-0 animate-fade-in-up animate-delay-900"
@@ -123,8 +142,7 @@ const SignIn = () => {
               </Button>
             </form>
 
-            {/* Sign up link */}
-            <div className="mt-6 text-center  animate-fade-in-up animate-delay-1000">
+            <div className="mt-6 text-center animate-fade-in-up animate-delay-1000">
               <p className="text-purple-400">
                 Don't have an account?{" "}
                 <Link

@@ -11,6 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ArrowLeft, User, Mail, Lock } from "lucide-react";
+import axios from "axios";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -21,11 +22,7 @@ const SignUp = () => {
     password: "",
     confirmPassword: "",
   });
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    navigate("/dashboard");
-  };
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData({
@@ -34,10 +31,40 @@ const SignUp = () => {
     });
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/v1/user/signup",
+        {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          password: formData.password,
+        }
+      );
+
+      if (response.data.token) {
+        // ✅ after signup, redirect to signin
+        navigate("/signin");
+      } else {
+        setError(response.data.message || "Signup failed");
+      }
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-950 to-black flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Back Link */}
         <Link
           to="/"
           className="inline-flex items-center text-purple-500 hover:text-purple-400 mb-8 transition-colors duration-300 opacity-0 animate-fade-in-up animate-delay-200"
@@ -46,20 +73,16 @@ const SignUp = () => {
           Back to Home
         </Link>
 
-        {/* Card */}
         <Card className="bg-gray-900 border border-gray-700 shadow-xl opacity-0 animate-scale-in">
           <CardHeader className="text-center space-y-2">
-            {/* Icon */}
             <div className="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 opacity-0 animate-fade-in-up animate-delay-300">
               <span className="text-white font-bold text-xl">P</span>
             </div>
 
-            {/* Title */}
             <CardTitle className="text-2xl font-bold text-white opacity-0 animate-fade-in-up animate-delay-400">
               Create Account
             </CardTitle>
 
-            {/* Description */}
             <CardDescription className="text-white opacity-0 animate-fade-in-up animate-delay-500">
               Join PayFlow and start sending money instantly
             </CardDescription>
@@ -161,7 +184,12 @@ const SignUp = () => {
                 </div>
               </div>
 
-              {/* Sign Up Button */}
+              {error && (
+                <p className="text-red-500 text-sm opacity-0 animate-fade-in-up animate-delay-950">
+                  {error}
+                </p>
+              )}
+
               <Button
                 type="submit"
                 className="w-full bg-purple-600 hover:bg-purple-700 text-white opacity-0 animate-fade-in-up animate-delay-1000"
@@ -170,7 +198,6 @@ const SignUp = () => {
               </Button>
             </form>
 
-            {/* Sign In link */}
             <div className="mt-6 text-center opacity-0 animate-fade-in-up animate-delay-1100">
               <p className="text-purple-400">
                 Already have an account?{" "}
