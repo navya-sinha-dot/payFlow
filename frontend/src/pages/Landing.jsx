@@ -28,7 +28,7 @@ const Landing = () => {
               data-aos="fade-up"
               data-aos-delay="300"
             >
-              <Link to="/signup">
+              <Link to={token ? "/dashboard" : "/signup"}>
                 <Button
                   size="lg"
                   className="bg-purple-600 hover:bg-purple-700 text-white text-lg px-8 py-6"

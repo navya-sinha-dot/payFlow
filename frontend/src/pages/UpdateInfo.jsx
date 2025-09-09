@@ -34,17 +34,31 @@ const UpdateInfo = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
+
+      // Only send non-empty fields
+      const updateData = {};
+      if (formData.firstName.trim()) updateData.firstName = formData.firstName;
+      if (formData.lastName.trim()) updateData.lastName = formData.lastName;
+      if (formData.password.trim()) updateData.password = formData.password;
+
+      if (Object.keys(updateData).length === 0) {
+        setMessage("Please enter at least one field to update.");
+        setSuccess(false);
+        return;
+      }
+
       const response = await axios.put(
         "http://localhost:3000/api/v1/user/updateinfo",
-        formData,
+        updateData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      if (formData.firstName) {
-        localStorage.setItem("firstName", formData.firstName);
+
+      if (updateData.firstName) {
+        localStorage.setItem("firstName", updateData.firstName);
         window.dispatchEvent(new Event("storage"));
       }
 
