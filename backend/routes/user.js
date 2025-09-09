@@ -4,7 +4,7 @@ const { JWT_SECRET } = require("../config");
 const router = express.Router();
 const zod = require("zod");
 const { User, Account } = require("../db");
-const { authMiddleware } = require("../middleware");
+const { authMiddleware } = require("../auth");
 
 const signupBody = zod.object({
   email: zod.string().email(),

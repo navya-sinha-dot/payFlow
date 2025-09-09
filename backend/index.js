@@ -17,6 +17,8 @@ app.use(cors());
 app.use(express.json());
 app.use("/api/v1", rootRouter);
 
-app.listen(3000, (req, res) => {
-  console.log("backend is running");
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, (req, res) => {
+  console.log("backend is running on port " + PORT);
 });
