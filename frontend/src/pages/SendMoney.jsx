@@ -54,7 +54,6 @@ const SendMoney = () => {
             description: "Your transfer was successful.",
           }
         );
-
         setTimeout(() => navigate("/dashboard"), 1500);
       }
     } catch (error) {
@@ -72,7 +71,14 @@ const SendMoney = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-950 to-black flex items-center justify-center p-4">
+    <div className="relative min-h-screen bg-gradient-to-b from-gray-900 via-gray-950 to-black flex items-center justify-center p-4">
+      {/* Loader Overlay */}
+      {loading && (
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      )}
+
       <div className="w-full max-w-md">
         <Link
           to="/dashboard"
@@ -83,10 +89,9 @@ const SendMoney = () => {
 
         <Card className="bg-gray-800/60 border border-gray-700 text-white rounded-2xl shadow-2xl overflow-hidden backdrop-blur-lg opacity-0 animate-fade-in-up animate-delay-400">
           <CardHeader>
-            {/* Logo instead of Circle */}
             <div className="flex justify-center mb-4 opacity-0 animate-fade-in-up animate-delay-300">
               <img
-                src="/payflow.png" // ensure this path is correct (place logo in public/)
+                src="/payflow.png"
                 alt="PayFlow Logo"
                 className="w-16 h-16 object-contain"
               />
@@ -123,7 +128,7 @@ const SendMoney = () => {
                 disabled={loading}
                 className="w-full bg-purple-600 hover:bg-purple-700 transition-colors"
               >
-                {loading ? "Transferring..." : "Send Money"}
+                {loading ? "Processing..." : "Send Money"}
               </Button>
             </form>
           </CardContent>

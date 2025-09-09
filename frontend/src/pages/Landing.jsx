@@ -11,11 +11,10 @@ const Landing = () => {
       <div data-aos="fade-down" data-aos-delay="100">
         <Navbar />
       </div>
-      {/* Hero Section */}
+
       <section className="pt-28 pb-20 px-4">
         <div className="container mx-auto">
           <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-12">
-            {/* Left: Text */}
             <div
               className="w-full md:w-1/2 text-center md:text-left md:pl-10" // added md:pl-8
               data-aos="fade-right"
@@ -52,14 +51,13 @@ const Landing = () => {
               </div>
             </div>
 
-            {/* Right: Image */}
             <div
               className="w-full md:w-1/2 flex justify-center md:justify-start md:pl-8"
               data-aos="fade-left"
               data-aos-delay="400"
             >
               <img
-                src="/payflow2.svg" // replace with your logo path
+                src="/payflow2.svg"
                 alt="PayFlow Illustration"
                 className="w-72 md:w-[400px] object-contain transform transition duration-500 hover:scale-105"
               />
@@ -68,7 +66,6 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* Features Section */}
       <section className="py-20 px-4">
         <div className="container mx-auto">
           <h2
@@ -134,7 +131,6 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="py-20 px-4 bg-gradient-to-r from-purple-900 to-purple-950">
         <div
           className="container mx-auto text-center"

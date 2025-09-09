@@ -26,11 +26,9 @@ const Dashboard = () => {
       }
 
       try {
-        // Decode JWT to get current userId
         const payload = JSON.parse(atob(token.split(".")[1]));
         setCurrentUserId(payload.userId);
 
-        // Fetch balance
         const response = await axios.get(
           `${BACKEND_URL_PROD}/account/balance`,
           { headers: { Authorization: `Bearer ${token}` } }
@@ -46,7 +44,6 @@ const Dashboard = () => {
     fetchBalance();
   }, [navigate]);
 
-  // Fetch all users from /bulk
   useEffect(() => {
     const fetchUsers = async () => {
       const token = localStorage.getItem("token");
@@ -74,8 +71,18 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-black text-white">
-        <p className="text-lg">Loading Dashboard...</p>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-gray-900 via-gray-950 to-black text-white relative">
+        {/* Purple glowing background pulse */}
+        <div className="absolute w-72 h-72 bg-purple-500/20 rounded-full blur-3xl animate-pulse" />
+
+        {/* Spinner */}
+        <div className="relative flex flex-col items-center space-y-6 z-10">
+          <div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
+
+          <p className="text-lg font-medium text-purple-300 animate-fade-in">
+            Loading your dashboard...
+          </p>
+        </div>
       </div>
     );
   }

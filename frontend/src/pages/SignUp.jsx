@@ -50,7 +50,6 @@ const SignUp = () => {
       });
 
       if (response.data.token) {
-        // ✅ after signup, redirect to signin
         navigate("/signin");
       } else {
         setError(response.data.message || "Signup failed");
@@ -73,10 +72,9 @@ const SignUp = () => {
 
         <Card className="bg-gray-900 border border-gray-700 shadow-xl opacity-0 animate-scale-in">
           <CardHeader className="text-center space-y-2">
-            {/* Logo instead of Circle */}
             <div className="flex justify-center mb-4 opacity-0 animate-fade-in-up animate-delay-300">
               <img
-                src="/payflow.png" // ensure this path is correct (place logo in public/)
+                src="/payflow.png"
                 alt="PayFlow Logo"
                 className="w-16 h-16 object-contain"
               />
