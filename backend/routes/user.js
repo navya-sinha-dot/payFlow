@@ -112,7 +112,7 @@ router.put("/updateinfo", authMiddleware, async (req, res) => {
   }
 
   const result = await User.updateOne({ _id: req.userId }, req.body);
-  console.log(result);
+
   res.json({
     message: "Update happened successfully",
   });
