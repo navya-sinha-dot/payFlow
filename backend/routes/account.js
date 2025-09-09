@@ -32,7 +32,7 @@ router.post("/transfer", authMiddleware, async (req, res) => {
     });
   }
 
-  const toaccount = Account.findOne({
+  const toaccount = await Account.findOne({
     userId: to,
   });
 
