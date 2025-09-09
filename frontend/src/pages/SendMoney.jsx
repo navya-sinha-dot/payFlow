@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,7 +10,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ArrowLeft, DollarSign, CheckCircle, XCircle } from "lucide-react";
+import { ArrowLeft, IndianRupee } from "lucide-react";
+import { toast } from "sonner";
 
 const SendMoney = () => {
   const navigate = useNavigate();
@@ -19,17 +20,6 @@ const SendMoney = () => {
   const recipientName = searchParams.get("name");
   const [formData, setFormData] = useState({ amount: "" });
   const [loading, setLoading] = useState(false);
-
-  // notification state
-  const [notification, setNotification] = useState(null);
-
-  // auto-hide notification after 3s
-  useEffect(() => {
-    if (notification) {
-      const timer = setTimeout(() => setNotification(null), 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [notification]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,20 +46,24 @@ const SendMoney = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        setNotification({
-          type: "error",
-          message: data.message || "Transfer failed",
+        toast.error(data.message || "Transfer failed", {
+          description: "Please check the details and try again.",
         });
       } else {
-        setNotification({
-          type: "success",
-          message: `₹${formData.amount} sent to ${recipientName || "user"}!`,
-        });
+        toast.success(
+          `₹${formData.amount} sent to ${recipientName || "user"}!`,
+          {
+            description: "Your transfer was successful.",
+          }
+        );
+
         setTimeout(() => navigate("/dashboard"), 1500);
       }
     } catch (error) {
       console.error(error);
-      setNotification({ type: "error", message: "Something went wrong" });
+      toast.error("Something went wrong", {
+        description: "Unable to complete the transfer.",
+      });
     } finally {
       setLoading(false);
     }
@@ -91,6 +85,14 @@ const SendMoney = () => {
 
         <Card className="bg-gray-800/60 border border-gray-700 text-white rounded-2xl shadow-2xl overflow-hidden backdrop-blur-lg opacity-0 animate-fade-in-up animate-delay-400">
           <CardHeader>
+            {/* Logo instead of Circle */}
+            <div className="flex justify-center mb-4 opacity-0 animate-fade-in-up animate-delay-300">
+              <img
+                src="/payflow.png" // ensure this path is correct (place logo in public/)
+                alt="PayFlow Logo"
+                className="w-16 h-16 object-contain"
+              />
+            </div>
             <CardTitle className="text-2xl font-bold text-center text-purple-400">
               Send Money
             </CardTitle>
@@ -104,7 +106,7 @@ const SendMoney = () => {
               <div className="space-y-2">
                 <Label htmlFor="amount">Amount</Label>
                 <div className="relative">
-                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <IndianRupee className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                   <Input
                     id="amount"
                     name="amount"
@@ -129,29 +131,6 @@ const SendMoney = () => {
           </CardContent>
         </Card>
       </div>
-
-      {/* Notification Toast */}
-      {notification && (
-        <div className="fixed bottom-6 right-6 animate-slide-up">
-          <div
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg border 
-            ${
-              notification.type === "success"
-                ? "bg-green-600/90 border-green-400"
-                : "bg-red-600/90 border-red-400"
-            }`}
-          >
-            {notification.type === "success" ? (
-              <CheckCircle className="w-5 h-5 text-white" />
-            ) : (
-              <XCircle className="w-5 h-5 text-white" />
-            )}
-            <span className="text-white font-medium">
-              {notification.message}
-            </span>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

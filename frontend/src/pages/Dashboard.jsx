@@ -83,7 +83,6 @@ const Dashboard = () => {
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-950 to-black text-white">
       <Navbar />
       <div className="container mx-auto px-6 pt-28 pb-8">
-        {/* Balance Card */}
         <Card className="mb-8 relative overflow-hidden rounded-2xl shadow-2xl border border-purple-500/40 animate-fade-in mx-8">
           <div className="absolute inset-0 bg-gradient-to-l from-purple-700 via-purple-800 to-purple-900" />
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10" />
@@ -109,11 +108,9 @@ const Dashboard = () => {
           </CardContent>
         </Card>
 
-        {/* Users Section */}
         <div className="opacity-0 animate-fade-in-up animate-delay-300">
           <h2 className="text-2xl font-bold mb-6 text-white">Users</h2>
 
-          {/* Search */}
           <div className="relative mb-6 opacity-0 animate-fade-in-up animate-delay-400">
             <Search className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
             <Input
@@ -124,7 +121,6 @@ const Dashboard = () => {
             />
           </div>
 
-          {/* Users List */}
           <div className="space-y-3">
             {users.map((user, index) => (
               <Card

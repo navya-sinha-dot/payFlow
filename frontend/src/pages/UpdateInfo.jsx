@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { ArrowLeft, User, Lock } from "lucide-react";
 import axios from "axios";
+import { toast } from "sonner";
 
 const UpdateInfo = () => {
   const navigate = useNavigate();
@@ -20,8 +21,6 @@ const UpdateInfo = () => {
     lastName: "",
     password: "",
   });
-  const [message, setMessage] = useState("");
-  const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -42,8 +41,7 @@ const UpdateInfo = () => {
       if (formData.password.trim()) updateData.password = formData.password;
 
       if (Object.keys(updateData).length === 0) {
-        setMessage("Please enter at least one field to update.");
-        setSuccess(false);
+        toast.error("Please enter at least one field to update.");
         return;
       }
 
@@ -62,11 +60,18 @@ const UpdateInfo = () => {
         window.dispatchEvent(new Event("storage"));
       }
 
-      setMessage(response.data.message || "Update successful");
-      setSuccess(true);
+      toast.success(response.data.message || "Update successful!", {
+        description: "Your profile has been updated successfully.",
+      });
+
+      // Delay navigation a bit so user sees the toast
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1500);
     } catch (err) {
-      setMessage("Error while updating info");
-      setSuccess(false);
+      toast.error("Error while updating info.", {
+        description: "Something went wrong. Please try again.",
+      });
     }
   };
 
@@ -83,15 +88,20 @@ const UpdateInfo = () => {
 
         <Card className="bg-gray-900 border border-gray-700 shadow-xl opacity-0 animate-scale-in">
           <CardHeader className="text-center space-y-2">
-            <div className="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 opacity-0 animate-fade-in-up animate-delay-300">
-              <span className="text-white font-bold text-xl">U</span>
+            {/* Logo instead of Circle */}
+            <div className="flex justify-center mb-4 opacity-0 animate-fade-in-up animate-delay-300">
+              <img
+                src="/payflow.png" // ensure this path is correct (place logo in public/)
+                alt="PayFlow Logo"
+                className="w-16 h-16 object-contain"
+              />
             </div>
 
             <CardTitle className="text-2xl font-bold text-white opacity-0 animate-fade-in-up animate-delay-400">
               Update Information
             </CardTitle>
 
-            <CardDescription className="text-white opacity-0 animate-fade-in-up animate-delay-500">
+            <CardDescription className="text-gray-400 opacity-0 animate-fade-in-up animate-delay-500">
               Keep your profile details up to date
             </CardDescription>
           </CardHeader>
@@ -149,30 +159,12 @@ const UpdateInfo = () => {
                 </div>
               </div>
 
-              {message && (
-                <p className="text-purple-400 text-sm opacity-0 animate-fade-in-up animate-delay-900">
-                  {message}
-                </p>
-              )}
-
-              {!success && (
-                <Button
-                  type="submit"
-                  className="w-full bg-purple-600 hover:bg-purple-700 text-white opacity-0 animate-fade-in-up animate-delay-1000"
-                >
-                  Update Info
-                </Button>
-              )}
-
-              {success && (
-                <Button
-                  type="button"
-                  onClick={() => navigate("/dashboard")}
-                  className="w-full bg-green-600 hover:bg-green-700 text-white opacity-0 animate-fade-in-up animate-delay-1000"
-                >
-                  Go to Dashboard
-                </Button>
-              )}
+              <Button
+                type="submit"
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white opacity-0 animate-fade-in-up animate-delay-1000"
+              >
+                Update Info
+              </Button>
             </form>
           </CardContent>
         </Card>

@@ -58,7 +58,7 @@ const SignIn = () => {
       <div className="w-full max-w-md">
         <Link
           to="/"
-          className="inline-flex items-center text-purple-500 hover:text-purple-400 mb-8 transition-colors duration-300 opacity-0 animate-fade-in-up animate-delay-200"
+          className="inline-flex items-center text-purple-500 hover:text-purple-400 mb-4 transition-colors duration-300 opacity-0 animate-fade-in-up animate-delay-200"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Home
@@ -66,15 +66,20 @@ const SignIn = () => {
 
         <Card className="bg-gray-900 border border-gray-700 shadow-xl opacity-0 animate-scale-in">
           <CardHeader className="text-center space-y-2">
-            <div className="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 opacity-0 animate-fade-in-up animate-delay-300">
-              <span className="text-white font-bold text-xl">P</span>
+            {/* Logo instead of Circle */}
+            <div className="flex justify-center mb-4 opacity-0 animate-fade-in-up animate-delay-300">
+              <img
+                src="/payflow.png" // make sure this path is correct (public/payflow.png)
+                alt="PayFlow Logo"
+                className="w-16 h-16 object-contain"
+              />
             </div>
 
             <CardTitle className="text-2xl font-bold text-white opacity-0 animate-fade-in-up animate-delay-400">
               Welcome Back
             </CardTitle>
 
-            <CardDescription className="text-white opacity-0 animate-fade-in-up animate-delay-500">
+            <CardDescription className="text-gray-400 opacity-0 animate-fade-in-up animate-delay-500">
               Sign in to your PayFlow account
             </CardDescription>
           </CardHeader>
@@ -124,15 +129,6 @@ const SignIn = () => {
                   {error}
                 </p>
               )}
-
-              <div className="flex items-center justify-between opacity-0 animate-fade-in-up animate-delay-800">
-                <Link
-                  to="#"
-                  className="text-sm text-purple-500 hover:underline"
-                >
-                  Forgot password?
-                </Link>
-              </div>
 
               <Button
                 type="submit"

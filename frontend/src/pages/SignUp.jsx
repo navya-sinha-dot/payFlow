@@ -75,15 +75,20 @@ const SignUp = () => {
 
         <Card className="bg-gray-900 border border-gray-700 shadow-xl opacity-0 animate-scale-in">
           <CardHeader className="text-center space-y-2">
-            <div className="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 opacity-0 animate-fade-in-up animate-delay-300">
-              <span className="text-white font-bold text-xl">P</span>
+            {/* Logo instead of Circle */}
+            <div className="flex justify-center mb-4 opacity-0 animate-fade-in-up animate-delay-300">
+              <img
+                src="/payflow.png" // ensure this path is correct (place logo in public/)
+                alt="PayFlow Logo"
+                className="w-16 h-16 object-contain"
+              />
             </div>
 
-            <CardTitle className="text-2xl font-bold text-white opacity-0 animate-fade-in-up animate-delay-400">
+            <CardTitle className="text-2xl font-bold text-gray-200 opacity-0 animate-fade-in-up animate-delay-400">
               Create Account
             </CardTitle>
 
-            <CardDescription className="text-white opacity-0 animate-fade-in-up animate-delay-500">
+            <CardDescription className="text-gray-400 opacity-0 animate-fade-in-up animate-delay-500">
               Join PayFlow and start sending money instantly
             </CardDescription>
           </CardHeader>
@@ -92,7 +97,7 @@ const SignUp = () => {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-4 opacity-0 animate-fade-in-up animate-delay-600">
                 <div className="space-y-2">
-                  <Label htmlFor="firstName" className="text-white">
+                  <Label htmlFor="firstName" className="text-gray-300">
                     First Name
                   </Label>
                   <div className="relative">

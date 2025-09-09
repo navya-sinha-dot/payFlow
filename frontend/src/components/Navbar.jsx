@@ -14,7 +14,6 @@ const Navbar = () => {
 
     if (token) {
       setIsLoggedIn(true);
-
       if (firstName && firstName.length > 0) {
         setUserInitials(firstName.charAt(0).toUpperCase());
       } else if (email) {
@@ -28,7 +27,6 @@ const Navbar = () => {
 
   useEffect(() => {
     loadUser();
-
     const handleStorageChange = () => loadUser();
     window.addEventListener("storage", handleStorageChange);
 
@@ -49,39 +47,46 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed w-full top-0 z-50 bg-black/90 backdrop-blur-md border-b border-purple-700/50">
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+    <nav className="fixed w-full top-0 z-50 bg-gradient-to-t from-gray-900 via-gray-950 to-black shadow-lg shadow-purple-900/20">
+      <div className="container mx-auto px-6 py-4 flex items-center justify-between">
+        {/* Logo */}
         <Link
           to="/"
-          className="flex items-center space-x-2 group transition-transform duration-300"
+          className="flex items-center space-x-2 group transition-transform duration-300 opacity-0 animate-fade-in-up animate-delay-200"
         >
-          <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-purple-500/50 transition">
-            <span className="text-white font-bold text-lg">P</span>
-          </div>
-          <span className="text-2xl font-bold text-purple-400 group-hover:text-purple-300 transition">
+          <img
+            src="/payflow.png" // replace with your logo path
+            alt="PayFlow Logo"
+            className="w-10 h-10 object-contain transition-transform duration-300 group-hover:scale-110"
+          />
+          <span className="text-2xl font-extrabold text-purple-400 group-hover:text-purple-300 transition">
             PayFlow
           </span>
         </Link>
 
+        {/* Right section */}
         <div className="flex items-center space-x-4">
           {isLoggedIn ? (
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center text-white font-bold">
+              {/* User Avatar */}
+              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-600 to-purple-800 flex items-center justify-center text-white font-bold shadow-md shadow-purple-900/40 opacity-0 animate-fade-in-up animate-delay-400">
                 {userInitials}
               </div>
 
+              {/* Update Info */}
               <Link to="/updateinfo">
                 <Button
                   variant="ghost"
-                  className="text-purple-200 hover:bg-purple-700/30"
+                  className="text-purple-200 hover:bg-purple-700/30 hover:text-white transition opacity-0 animate-fade-in-up animate-delay-500"
                 >
                   Update Info
                 </Button>
               </Link>
 
+              {/* Logout */}
               <Button
                 variant="ghost"
-                className="text-purple-200 hover:bg-purple-700/30"
+                className="text-purple-200 hover:bg-purple-700/30 hover:text-white transition opacity-0 animate-fade-in-up animate-delay-600"
                 onClick={handleLogout}
               >
                 Logout
@@ -92,13 +97,13 @@ const Navbar = () => {
               <Link to="/signin">
                 <Button
                   variant="ghost"
-                  className="text-purple-200 hover:bg-purple-700/30"
+                  className="text-purple-200 hover:bg-purple-700/30 hover:text-white transition opacity-0 animate-fade-in-up animate-delay-400"
                 >
                   Sign In
                 </Button>
               </Link>
               <Link to="/signup">
-                <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+                <Button className="bg-purple-600 hover:bg-purple-700 text-white shadow-lg shadow-purple-800/40 opacity-0 animate-fade-in-up animate-delay-500">
                   Sign Up
                 </Button>
               </Link>
