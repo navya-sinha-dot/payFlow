@@ -71,18 +71,22 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-gray-900 via-gray-950 to-black text-white relative">
-        {/* Purple glowing background pulse */}
-        <div className="absolute w-72 h-72 bg-purple-500/20 rounded-full blur-3xl animate-pulse" />
-
-        {/* Spinner */}
-        <div className="relative flex flex-col items-center space-y-6 z-10">
-          <div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
-
-          <p className="text-lg font-medium text-purple-300 animate-fade-in">
-            Loading your dashboard...
-          </p>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-gray-900 via-gray-950 to-black text-white relative overflow-hidden">
+        <div className="absolute flex space-x-6">
+          {[...Array(5)].map((_, i) => (
+            <span
+              key={i}
+              className="text-3xl text-purple-400 animate-bounce"
+              style={{ animationDelay: `${i * 0.2}s` }}
+            >
+              ₹
+            </span>
+          ))}
         </div>
+
+        <p className="mt-24 text-lg font-medium text-purple-300 animate-fade-in">
+          Loading your dashboard...
+        </p>
       </div>
     );
   }

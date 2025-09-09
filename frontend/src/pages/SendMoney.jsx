@@ -70,15 +70,30 @@ const SendMoney = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-gray-900 via-gray-950 to-black text-white relative overflow-hidden">
+        <div className="absolute flex space-x-6">
+          {[...Array(5)].map((_, i) => (
+            <span
+              key={i}
+              className="text-3xl text-purple-400 animate-bounce"
+              style={{ animationDelay: `${i * 0.2}s` }}
+            >
+              ₹
+            </span>
+          ))}
+        </div>
+
+        <p className="mt-24 text-lg font-medium text-purple-300 animate-fade-in">
+          Processing your transfer...
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="relative min-h-screen bg-gradient-to-b from-gray-900 via-gray-950 to-black flex items-center justify-center p-4">
-      {/* Loader Overlay */}
-      {loading && (
-        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      )}
-
       <div className="w-full max-w-md">
         <Link
           to="/dashboard"
