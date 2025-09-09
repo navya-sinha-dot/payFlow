@@ -13,6 +13,7 @@ import {
 import { ArrowLeft, User, Lock } from "lucide-react";
 import axios from "axios";
 import { toast } from "sonner";
+import { BACKEND_URL_PROD } from "../lib/utils";
 
 const UpdateInfo = () => {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ const UpdateInfo = () => {
       }
 
       const response = await axios.put(
-        "http://localhost:3000/api/v1/user/updateinfo",
+        `${BACKEND_URL_PROD}/user/updateinfo`,
         updateData,
         {
           headers: {

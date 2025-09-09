@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Search, Send, Wallet } from "lucide-react";
 import Navbar from "../components/Navbar";
 import axios from "axios";
+import { BACKEND_URL_PROD } from "../lib/utils";
 
 const Dashboard = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -31,7 +32,7 @@ const Dashboard = () => {
 
         // Fetch balance
         const response = await axios.get(
-          "http://localhost:3000/api/v1/account/balance",
+          `${BACKEND_URL_PROD}/account/balance`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setBalance(response.data.balance);
@@ -53,7 +54,7 @@ const Dashboard = () => {
 
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/v1/user/bulk?filter=${searchQuery}`,
+          `${BACKEND_URL_PROD}/user/bulk?filter=${searchQuery}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 

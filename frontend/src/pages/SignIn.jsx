@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { ArrowLeft, Mail, Lock } from "lucide-react";
 import axios from "axios";
+import { BACKEND_URL_PROD } from "../lib/utils";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -33,13 +34,10 @@ const SignIn = () => {
     setError("");
 
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/v1/user/signin",
-        {
-          email: formData.email,
-          password: formData.password,
-        }
-      );
+      const response = await axios.post(`${BACKEND_URL_PROD}/user/signin`, {
+        email: formData.email,
+        password: formData.password,
+      });
 
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);

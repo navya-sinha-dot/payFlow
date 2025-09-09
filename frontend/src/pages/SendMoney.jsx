@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { ArrowLeft, IndianRupee } from "lucide-react";
 import { toast } from "sonner";
+import { BACKEND_URL_PROD } from "../lib/utils";
 
 const SendMoney = () => {
   const navigate = useNavigate();
@@ -28,20 +29,17 @@ const SendMoney = () => {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await fetch(
-        "http://localhost:3000/api/v1/account/transfer",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            to: recipientId,
-            amount: Number(formData.amount),
-          }),
-        }
-      );
+      const response = await fetch(`${BACKEND_URL_PROD}/account/transfer`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          to: recipientId,
+          amount: Number(formData.amount),
+        }),
+      });
 
       const data = await response.json();
 
