@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield, Zap, Users } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import { Github } from "lucide-react";
 
 const Landing = () => {
   const token = localStorage.getItem("token");
@@ -130,7 +131,6 @@ const Landing = () => {
           </div>
         </div>
       </section>
-
       <section className="py-20 px-4 bg-gradient-to-r from-purple-900 to-purple-950">
         <div
           className="container mx-auto text-center"
@@ -143,6 +143,21 @@ const Landing = () => {
           <p className="text-xl text-purple-200 mb-8 max-w-2xl mx-auto">
             Join thousands of users who trust PayFlow for their money transfers.
           </p>
+          <div className="flex justify-center mb-4">
+            <a
+              href="https://github.com/navya-sinha-dot/payFlow"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button
+                size="lg"
+                className="bg-white text-black hover:bg-gray-200 flex items-center gap-2 px-6 py-5 shadow-lg transition-transform transform hover:scale-105"
+              >
+                <Github className="h-5 w-5" />
+                View on GitHub
+              </Button>
+            </a>
+          </div>
         </div>
       </section>
     </div>

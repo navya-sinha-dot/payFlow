@@ -49,13 +49,12 @@ const Navbar = () => {
   return (
     <nav className="fixed w-full top-0 z-50 bg-gradient-to-t from-gray-900 via-gray-950 to-black shadow-lg shadow-purple-900/20">
       <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-        {/* Logo */}
         <Link
           to="/"
           className="flex items-center space-x-2 group transition-transform duration-300 opacity-0 animate-fade-in-up animate-delay-200"
         >
           <img
-            src="/payflow.png" // replace with your logo path
+            src="/payflow.png"
             alt="PayFlow Logo"
             className="w-10 h-10 object-contain transition-transform duration-300 group-hover:scale-110"
           />
@@ -64,11 +63,9 @@ const Navbar = () => {
           </span>
         </Link>
 
-        {/* Right section */}
         <div className="flex items-center space-x-4">
           {isLoggedIn ? (
             <div className="flex items-center space-x-3">
-              {/* User Avatar */}
               <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-600 to-purple-800 flex items-center justify-center text-white font-bold shadow-md shadow-purple-900/40 opacity-0 animate-fade-in-up animate-delay-400">
                 {userInitials}
               </div>
