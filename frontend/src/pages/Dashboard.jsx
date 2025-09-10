@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Search, Send, Wallet } from "lucide-react";
 import Navbar from "../components/Navbar";
 import axios from "axios";
-import { BACKEND_URL_PROD } from "../lib/utils";
+import { BACKEND_URL_DEV, BACKEND_URL_PROD } from "../lib/utils";
 
 const Dashboard = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -31,7 +31,9 @@ const Dashboard = () => {
 
         const response = await axios.get(
           `${BACKEND_URL_PROD}/account/balance`,
-          { headers: { Authorization: `Bearer ${token}` } }
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
         );
         setBalance(response.data.balance);
       } catch (err) {
@@ -111,7 +113,9 @@ const Dashboard = () => {
             </div>
 
             <div className="text-5xl font-extrabold text-white tracking-tight drop-shadow-sm">
-              {balance !== null ? `Rs ${balance}` : "Loading..."}
+              {balance !== null
+                ? `Rs ${Math.round(balance).toFixed(2)}`
+                : "Loading..."}
             </div>
 
             <p className="mt-2 text-sm text-purple-200">

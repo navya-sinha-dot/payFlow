@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { ArrowLeft, User, Mail, Lock } from "lucide-react";
 import axios from "axios";
-import { BACKEND_URL_PROD } from "../lib/utils";
+import { BACKEND_URL_DEV, BACKEND_URL_PROD } from "../lib/utils";
 
 const SignUp = () => {
   const navigate = useNavigate();

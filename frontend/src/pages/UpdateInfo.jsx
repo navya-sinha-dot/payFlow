@@ -13,7 +13,7 @@ import {
 import { ArrowLeft, User, Lock } from "lucide-react";
 import axios from "axios";
 import { toast } from "sonner";
-import { BACKEND_URL_PROD } from "../lib/utils";
+import { BACKEND_URL_DEV, BACKEND_URL_PROD } from "../lib/utils";
 
 const UpdateInfo = () => {
   const navigate = useNavigate();

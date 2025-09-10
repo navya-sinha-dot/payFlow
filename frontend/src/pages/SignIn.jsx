@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { ArrowLeft, Mail, Lock } from "lucide-react";
 import axios from "axios";
-import { BACKEND_URL_PROD } from "../lib/utils";
+import { BACKEND_URL_DEV, BACKEND_URL_PROD } from "../lib/utils";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -64,10 +64,9 @@ const SignIn = () => {
 
         <Card className="bg-gray-900 border border-gray-700 shadow-xl opacity-0 animate-scale-in">
           <CardHeader className="text-center space-y-2">
-            {/* Logo instead of Circle */}
             <div className="flex justify-center mb-4 opacity-0 animate-fade-in-up animate-delay-300">
               <img
-                src="/payflow.png" // make sure this path is correct (public/payflow.png)
+                src="/payflow.png"
                 alt="PayFlow Logo"
                 className="w-16 h-16 object-contain"
               />

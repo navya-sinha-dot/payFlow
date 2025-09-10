@@ -5,6 +5,7 @@ const router = express.Router();
 const zod = require("zod");
 const { User, Account } = require("../db");
 const { authMiddleware } = require("../auth");
+const bcrypt = require("bcrypt");
 
 const signupBody = zod.object({
   email: zod.string().email(),
@@ -30,10 +31,10 @@ router.post("/signup", async (req, res) => {
       message: "Email already taken",
     });
   }
-
+  const hashedPassword = await bcrypt.hash(req.body.password, 10);
   const user = await User.create({
     email: req.body.email,
-    password: req.body.password,
+    password: hashedPassword,
     firstName: req.body.firstName,
     lastName: req.body.lastName,
   });
@@ -74,8 +75,19 @@ router.post("/signin", async (req, res) => {
 
   const user = await User.findOne({
     email: req.body.email,
-    password: req.body.password,
   });
+
+  if (!user) {
+    return res.status(401).json({ message: "Invalid email" });
+  }
+
+  const isPasswordValid = await bcrypt.compare(
+    req.body.password,
+    user.password
+  );
+  if (!isPasswordValid) {
+    return res.status(401).json({ message: "Invalid password" });
+  }
 
   if (user) {
     const token = jwt.sign(
@@ -144,6 +156,30 @@ router.get("/bulk", async (req, res) => {
       _id: user._id,
     })),
   });
+});
+
+router.post("/verify", authMiddleware, async (req, res) => {
+  try {
+    const { password } = req.body;
+    if (!password) {
+      return res.status(400).json({ message: "Password is required" });
+    }
+
+    const user = await User.findById(req.userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid password" });
+    }
+
+    res.json({ message: "Password verified" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
 module.exports = router;

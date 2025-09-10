@@ -12,14 +12,14 @@ import {
 } from "@/components/ui/card";
 import { ArrowLeft, IndianRupee } from "lucide-react";
 import { toast } from "sonner";
-import { BACKEND_URL_PROD } from "../lib/utils";
+import { BACKEND_URL_DEV, BACKEND_URL_PROD } from "../lib/utils";
 
 const SendMoney = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const recipientId = searchParams.get("filter");
   const recipientName = searchParams.get("name");
-  const [formData, setFormData] = useState({ amount: "" });
+  const [formData, setFormData] = useState({ amount: "", password: "" });
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -29,6 +29,24 @@ const SendMoney = () => {
     try {
       const token = localStorage.getItem("token");
 
+      // Step 1: Verify password
+      const verifyRes = await fetch(`${BACKEND_URL_PROD}/user/verify`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ password: formData.password }),
+      });
+
+      if (!verifyRes.ok) {
+        const err = await verifyRes.json();
+        toast.error(err.message || "Password verification failed");
+        setLoading(false);
+        return;
+      }
+
+      // Step 2: Transfer money
       const response = await fetch(`${BACKEND_URL_PROD}/account/transfer`, {
         method: "POST",
         headers: {
@@ -138,6 +156,20 @@ const SendMoney = () => {
                 </div>
               </div>
 
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  placeholder="Enter your password"
+                  value={formData.password || ""}
+                  onChange={handleChange}
+                  className="bg-gray-700/50 border-gray-600 focus:border-purple-500 focus:ring-purple-500"
+                  required
+                />
+              </div>
+
               <Button
                 type="submit"
                 disabled={loading}
@@ -152,5 +184,4 @@ const SendMoney = () => {
     </div>
   );
 };
-
 export default SendMoney;
