@@ -70,7 +70,15 @@ const Navbar = () => {
                 {userInitials}
               </div>
 
-              {/* Update Info */}
+              <Link to="/transactions">
+                <Button
+                  variant="ghost"
+                  className="text-purple-200 hover:bg-purple-700/30 hover:text-white transition opacity-0 animate-fade-in-up animate-delay-450"
+                >
+                  View Transactions
+                </Button>
+              </Link>
+
               <Link to="/updateinfo">
                 <Button
                   variant="ghost"
@@ -80,7 +88,6 @@ const Navbar = () => {
                 </Button>
               </Link>
 
-              {/* Logout */}
               <Button
                 variant="ghost"
                 className="text-purple-200 hover:bg-purple-700/30 hover:text-white transition opacity-0 animate-fade-in-up animate-delay-600"

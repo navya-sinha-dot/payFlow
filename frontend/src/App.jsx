@@ -11,11 +11,10 @@ import Dashboard from "./pages/Dashboard";
 import SendMoney from "./pages/SendMoney";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./pages/ProtectedRoutes";
-
-import "aos/dist/aos.css"; // import AOS styles
 import AOS from "aos";
 import CustomCursor from "./components/CustomCursor";
 import UpdateInfo from "./pages/UpdateInfo";
+import TransactionHistory from "./pages/TransactionHistory";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +44,7 @@ const App = () => {
                   </ProtectedRoute>
                 }
               />
+              <Route path="/transactions" element={<TransactionHistory />} />
               <Route path="/send" element={<SendMoney />} />
               <Route
                 path="/updateinfo"
@@ -54,7 +54,7 @@ const App = () => {
                   </ProtectedRoute>
                 }
               />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

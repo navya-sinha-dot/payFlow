@@ -44,7 +44,7 @@ const SignUp = () => {
 
     setLoading(true); // start loader
     try {
-      const response = await axios.post(`${BACKEND_URL_PROD}/user/signup`, {
+      const response = await axios.post(`${BACKEND_URL_DEV}/user/signup`, {
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,

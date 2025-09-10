@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { date } = require("zod");
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -36,9 +37,35 @@ const accountSchema = new mongoose.Schema({
   },
 });
 
+const transactionSchema = new mongoose.Schema({
+  from: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
+  to: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
+  amount: {
+    type: Number,
+    required: true,
+  },
+  type: {
+    type: String,
+    enum: ["credit", "debit"],
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
 const User = mongoose.model("User", userSchema);
 const Account = mongoose.model("Account", accountSchema);
+const Transaction = mongoose.model("Transaction", transactionSchema);
+
 module.exports = {
   User,
   Account,
+  Transaction,
 };

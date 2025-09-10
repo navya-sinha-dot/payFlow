@@ -30,7 +30,7 @@ const SendMoney = () => {
       const token = localStorage.getItem("token");
 
       // Step 1: Verify password
-      const verifyRes = await fetch(`${BACKEND_URL_PROD}/user/verify`, {
+      const verifyRes = await fetch(`${BACKEND_URL_DEV}/user/verify`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -47,7 +47,7 @@ const SendMoney = () => {
       }
 
       // Step 2: Transfer money
-      const response = await fetch(`${BACKEND_URL_PROD}/account/transfer`, {
+      const response = await fetch(`${BACKEND_URL_DEV}/account/transfer`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

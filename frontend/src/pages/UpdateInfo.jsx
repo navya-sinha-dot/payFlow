@@ -47,7 +47,7 @@ const UpdateInfo = () => {
       }
 
       const response = await axios.put(
-        `${BACKEND_URL_PROD}/user/updateinfo`,
+        `${BACKEND_URL_DEV}/user/updateinfo`,
         updateData,
         {
           headers: {
@@ -65,7 +65,6 @@ const UpdateInfo = () => {
         description: "Your profile has been updated successfully.",
       });
 
-      // Delay navigation a bit so user sees the toast
       setTimeout(() => {
         navigate("/dashboard");
       }, 1500);
@@ -89,10 +88,9 @@ const UpdateInfo = () => {
 
         <Card className="bg-gray-900 border border-gray-700 shadow-xl opacity-0 animate-scale-in">
           <CardHeader className="text-center space-y-2">
-            {/* Logo instead of Circle */}
             <div className="flex justify-center mb-4 opacity-0 animate-fade-in-up animate-delay-300">
               <img
-                src="/payflow.png" // ensure this path is correct (place logo in public/)
+                src="/payflow.png"
                 alt="PayFlow Logo"
                 className="w-16 h-16 object-contain"
               />

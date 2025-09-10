@@ -29,12 +29,9 @@ const Dashboard = () => {
         const payload = JSON.parse(atob(token.split(".")[1]));
         setCurrentUserId(payload.userId);
 
-        const response = await axios.get(
-          `${BACKEND_URL_PROD}/account/balance`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const response = await axios.get(`${BACKEND_URL_DEV}/account/balance`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setBalance(response.data.balance);
       } catch (err) {
         console.error("Error fetching balance:", err);
@@ -53,7 +50,7 @@ const Dashboard = () => {
 
       try {
         const response = await axios.get(
-          `${BACKEND_URL_PROD}/user/bulk?filter=${searchQuery}`,
+          `${BACKEND_URL_DEV}/user/bulk?filter=${searchQuery}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
