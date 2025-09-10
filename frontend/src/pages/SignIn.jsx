@@ -36,7 +36,7 @@ const SignIn = () => {
     setLoading(true); // start loader
 
     try {
-      const response = await axios.post(`${BACKEND_URL_DEV}/user/signin`, {
+      const response = await axios.post(`${BACKEND_URL_PROD}/user/signin`, {
         email: formData.email,
         password: formData.password,
       });

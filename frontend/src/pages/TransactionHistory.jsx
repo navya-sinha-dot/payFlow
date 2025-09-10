@@ -19,7 +19,7 @@ const TransactionHistory = () => {
     const fetchTransactions = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch(`${BACKEND_URL_DEV}/account/transactions`, {
+        const res = await fetch(`${BACKEND_URL_PROD}/account/transactions`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

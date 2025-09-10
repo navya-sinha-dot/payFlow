@@ -47,7 +47,7 @@ const UpdateInfo = () => {
       }
 
       const response = await axios.put(
-        `${BACKEND_URL_DEV}/user/updateinfo`,
+        `${BACKEND_URL_PROD}/user/updateinfo`,
         updateData,
         {
           headers: {
