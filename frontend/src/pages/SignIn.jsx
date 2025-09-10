@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ArrowLeft, Mail, Lock } from "lucide-react";
+import { ArrowLeft, Mail, Lock, Loader2 } from "lucide-react";
 import axios from "axios";
 import { BACKEND_URL_DEV, BACKEND_URL_PROD } from "../lib/utils";
 
@@ -21,6 +21,7 @@ const SignIn = () => {
     password: "",
   });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // loader state
 
   const handleChange = (e) => {
     setFormData({
@@ -32,6 +33,7 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true); // start loader
 
     try {
       const response = await axios.post(`${BACKEND_URL_PROD}/user/signin`, {
@@ -48,6 +50,8 @@ const SignIn = () => {
       }
     } catch (err) {
       setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false); // stop loader after response
     }
   };
 
@@ -97,6 +101,7 @@ const SignIn = () => {
                     className="pl-10 bg-gray-800 text-white placeholder-gray border border-gray-700 focus:border-purple-200"
                     value={formData.email}
                     onChange={handleChange}
+                    disabled={loading}
                     required
                   />
                 </div>
@@ -116,6 +121,7 @@ const SignIn = () => {
                     className="pl-10 bg-gray-800 text-white placeholder-gray border border-gray-700 focus:border-purple-500"
                     value={formData.password}
                     onChange={handleChange}
+                    disabled={loading}
                     required
                   />
                 </div>
@@ -129,9 +135,17 @@ const SignIn = () => {
 
               <Button
                 type="submit"
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white opacity-0 animate-fade-in-up animate-delay-900"
+                disabled={loading}
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-center gap-2 opacity-0 animate-fade-in-up animate-delay-900 disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                Sign In
+                {loading ? (
+                  <>
+                    <Loader2 className="animate-spin h-5 w-5" />
+                    Signing In...
+                  </>
+                ) : (
+                  "Sign In"
+                )}
               </Button>
             </form>
 

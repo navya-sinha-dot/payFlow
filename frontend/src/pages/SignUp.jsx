@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ArrowLeft, User, Mail, Lock } from "lucide-react";
+import { ArrowLeft, User, Mail, Lock, Loader2 } from "lucide-react"; // added Loader2
 import axios from "axios";
 import { BACKEND_URL_DEV, BACKEND_URL_PROD } from "../lib/utils";
 
@@ -24,6 +24,7 @@ const SignUp = () => {
     confirmPassword: "",
   });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // loader state
 
   const handleChange = (e) => {
     setFormData({
@@ -41,6 +42,7 @@ const SignUp = () => {
       return;
     }
 
+    setLoading(true); // start loader
     try {
       const response = await axios.post(`${BACKEND_URL_PROD}/user/signup`, {
         firstName: formData.firstName,
@@ -56,6 +58,8 @@ const SignUp = () => {
       }
     } catch (err) {
       setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false); // stop loader
     }
   };
 
@@ -106,6 +110,7 @@ const SignUp = () => {
                       className="pl-10 bg-gray-800 text-white border border-gray-700 focus:border-purple-500"
                       value={formData.firstName}
                       onChange={handleChange}
+                      disabled={loading}
                       required
                     />
                   </div>
@@ -123,6 +128,7 @@ const SignUp = () => {
                     className="bg-gray-800 text-white border border-gray-700 focus:border-purple-500"
                     value={formData.lastName}
                     onChange={handleChange}
+                    disabled={loading}
                     required
                   />
                 </div>
@@ -142,6 +148,7 @@ const SignUp = () => {
                     className="pl-10 bg-gray-800 text-white border border-gray-700 focus:border-purple-500"
                     value={formData.email}
                     onChange={handleChange}
+                    disabled={loading}
                     required
                   />
                 </div>
@@ -161,6 +168,7 @@ const SignUp = () => {
                     className="pl-10 bg-gray-800 text-white border border-gray-700 focus:border-purple-500"
                     value={formData.password}
                     onChange={handleChange}
+                    disabled={loading}
                     required
                   />
                 </div>
@@ -180,6 +188,7 @@ const SignUp = () => {
                     className="pl-10 bg-gray-800 text-white border border-gray-700 focus:border-purple-500"
                     value={formData.confirmPassword}
                     onChange={handleChange}
+                    disabled={loading}
                     required
                   />
                 </div>
@@ -193,9 +202,17 @@ const SignUp = () => {
 
               <Button
                 type="submit"
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white opacity-0 animate-fade-in-up animate-delay-1000"
+                disabled={loading}
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-center gap-2 opacity-0 animate-fade-in-up animate-delay-1000 disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                Create Account
+                {loading ? (
+                  <>
+                    <Loader2 className="animate-spin h-5 w-5" />
+                    Creating...
+                  </>
+                ) : (
+                  "Create Account"
+                )}
               </Button>
             </form>
 
