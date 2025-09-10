@@ -8,7 +8,7 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { ArrowLeft, Clock } from "lucide-react";
-import { BACKEND_URL_DEV } from "../lib/utils";
+import { BACKEND_URL_DEV, BACKEND_URL_PROD } from "../lib/utils";
 import { toast } from "sonner";
 
 const TransactionHistory = () => {
