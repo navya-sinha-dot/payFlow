@@ -89,4 +89,26 @@ router.get("/transactions", authMiddleware, async (req, res) => {
   }
 });
 
+router.get("/notifications", authMiddleware, async (req, res) => {
+  try {
+    const creditTx = await Transaction.find({ to: req.userId })
+      .populate("from", "firstName lastName email")
+      .sort({ date: -1 })
+      .limit(10);
+
+    const notifications = creditTx.map((tx) => ({
+      _id: tx._id,
+      from: `${tx.from.firstName} ${tx.from.lastName}`,
+      amount: tx.amount,
+      date: tx.date,
+      message: `₹${tx.amount} credited from ${tx.from.firstName}`,
+    }));
+
+    res.json({ notifications });
+  } catch (err) {
+    console.error("Notification fetch error:", err);
+    res.status(500).json({ message: "Failed to fetch notifications" });
+  }
+});
+
 module.exports = router;

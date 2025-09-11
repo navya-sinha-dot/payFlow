@@ -1,11 +1,19 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
+import { Bell } from "lucide-react"; // Bell icon
+import { fetchNotifications } from "../api/notifications"; // API
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [userInitials, setUserInitials] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Notifications state
+  const [notifications, setNotifications] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [lastSeenCount, setLastSeenCount] = useState(0); // 👈 track last seen
 
   const loadUser = () => {
     const email = localStorage.getItem("userEmail");
@@ -27,13 +35,39 @@ const Navbar = () => {
 
   useEffect(() => {
     loadUser();
+
+    const token = localStorage.getItem("token");
+    if (token) {
+      // Initial fetch
+      fetchNotifications(token).then((data) => {
+        const notifs = data.notifications || [];
+        setNotifications(notifs);
+        setUnreadCount(Math.max(0, notifs.length - lastSeenCount));
+      });
+
+      // Poll every 10s
+      const interval = setInterval(() => {
+        fetchNotifications(token).then((data) => {
+          const notifs = data.notifications || [];
+          setNotifications(notifs);
+
+          // New notifications only if length increased
+          if (notifs.length > lastSeenCount) {
+            setUnreadCount(notifs.length - lastSeenCount);
+          }
+        });
+      }, 10000);
+
+      return () => clearInterval(interval);
+    }
+
     const handleStorageChange = () => loadUser();
     window.addEventListener("storage", handleStorageChange);
 
     return () => {
       window.removeEventListener("storage", handleStorageChange);
     };
-  }, []);
+  }, [lastSeenCount]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -65,7 +99,61 @@ const Navbar = () => {
 
         <div className="flex items-center space-x-4">
           {isLoggedIn ? (
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-3 relative">
+              <button
+                className="relative"
+                onClick={() => {
+                  const willOpen = !showDropdown;
+                  setShowDropdown(willOpen);
+
+                  if (willOpen) {
+                    // Mark all as read
+                    setLastSeenCount(notifications.length);
+                    setUnreadCount(0);
+                  }
+                }}
+              >
+                <Bell className="w-6 h-6 text-purple-200 hover:text-white transition" />
+                {unreadCount > 0 && !showDropdown && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-xs text-white rounded-full w-5 h-5 flex items-center justify-center animate-bounce">
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
+
+              {showDropdown && (
+                <div className="absolute right-0 top-10 w-72 bg-gradient-to-b from-gray-900 via-gray-950 to-black text-white rounded-lg shadow-lg p-3 border border-purple-800/40">
+                  <div className="flex justify-between items-center mb-2">
+                    <h3 className="text-sm font-semibold text-purple-300">
+                      Notifications
+                    </h3>
+                    <button
+                      onClick={() => setShowDropdown(false)}
+                      className="text-xs text-gray-400 hover:text-purple-400"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                  {notifications.length === 0 ? (
+                    <p className="text-sm text-gray-500">No notifications</p>
+                  ) : (
+                    notifications.map((n) => (
+                      <div
+                        key={n._id}
+                        className="border-b border-gray-800 py-2 text-sm last:border-0"
+                      >
+                        <p className="font-medium text-purple-200">
+                          {n.message}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {new Date(n.date).toLocaleString()}
+                        </p>
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
+
               <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-600 to-purple-800 flex items-center justify-center text-white font-bold shadow-md shadow-purple-900/40 opacity-0 animate-fade-in-up animate-delay-400">
                 {userInitials}
               </div>
