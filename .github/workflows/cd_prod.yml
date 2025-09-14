@@ -18,7 +18,7 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST_IP }}
           username: ubuntu
-          password: ${{ secrets.SSH_PASSWORD }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
             cd ~/payFlow
@@ -33,4 +33,5 @@ jobs:
             echo "Restarting services..."
             JWT_SECRET=${{ secrets.JWT_SECRET }} pm2 restart frontend --update-env
             JWT_SECRET=${{ secrets.JWT_SECRET }} pm2 restart backend --update-env
+
             echo "Deployment completed successfully!"
