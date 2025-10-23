@@ -57,8 +57,13 @@ const SignUp = () => {
         setError(response.data.message || "Signup failed");
       }
     } catch (err) {
-      setError("Something went wrong. Please try again.");
-    } finally {
+  if (axios.isAxiosError(err)) {
+    
+    setError(err.response?.data?.message || "An error occurred during login.");
+  } else {
+    setError(err.message || "Unexpected error occurred.");
+  }
+    }  finally {
       setLoading(false); // stop loader
     }
   };

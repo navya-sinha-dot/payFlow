@@ -21,7 +21,7 @@ const SignIn = () => {
     password: "",
   });
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false); // loader state
+  const [loading, setLoading] = useState(false); 
 
   const handleChange = (e) => {
     setFormData({
@@ -33,7 +33,7 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setLoading(true); // start loader
+    setLoading(true); 
 
     try {
       const response = await axios.post(`${BACKEND_URL_PROD}/user/signin`, {
@@ -49,9 +49,14 @@ const SignIn = () => {
         setError(response.data.message || "Login failed");
       }
     } catch (err) {
-      setError("Something went wrong. Please try again.");
+  if (axios.isAxiosError(err)) {
+    
+    setError(err.response?.data?.message || "An error occurred during login.");
+  } else {
+    setError(err.message || "Unexpected error occurred.");
+  }
     } finally {
-      setLoading(false); // stop loader after response
+      setLoading(false); 
     }
   };
 
