@@ -13,7 +13,7 @@ const Navbar = () => {
   const [notifications, setNotifications] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
-  const [lastSeenCount, setLastSeenCount] = useState(0); // 👈 track last seen
+  const [lastSeenCount, setLastSeenCount] = useState(0);
 
   const loadUser = () => {
     const email = localStorage.getItem("userEmail");

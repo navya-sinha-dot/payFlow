@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config");
 const router = express.Router();
@@ -15,48 +16,76 @@ const signupBody = zod.object({
 });
 
 router.post("/signup", async (req, res) => {
-  const success = signupBody.safeParse(req.body);
-  if (!success) {
-    return res.status(411).json({
-      message: "Email already taken / Incorrect inputs",
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    const success = signupBody.safeParse(req.body);
+    if (!success) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(411).json({
+        message: "Email already taken / Incorrect inputs",
+      });
+    }
+
+    const existingUser = await User.findOne({
+      email: req.body.email,
+    }).session(session);
+
+    if (existingUser) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(411).json({
+        message: "Email already taken",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const user = await User.create(
+      [
+        {
+          email: req.body.email,
+          password: hashedPassword,
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+        },
+      ],
+      { session }
+    );
+
+    const userId = user[0]._id;
+
+    await Account.create(
+      [
+        {
+          userId,
+          balance: Math.round((1 + Math.random() * 10000) * 100) / 100,
+        },
+      ],
+      { session }
+    );
+
+    await session.commitTransaction();
+    session.endSession();
+
+    const token = jwt.sign(
+      {
+        userId,
+      },
+      JWT_SECRET
+    );
+
+    res.json({
+      message: "user created successfully",
+      token: token,
     });
+  } catch (err) {
+    await session.abortTransaction();
+    session.endSession();
+    console.error("Signup error:", err);
+    res.status(500).json({ message: "Error during signup" });
   }
-
-  const existingUser = await User.findOne({
-    email: req.body.email,
-  });
-
-  if (existingUser) {
-    return res.status(411).json({
-      message: "Email already taken",
-    });
-  }
-  const hashedPassword = await bcrypt.hash(req.body.password, 10);
-  const user = await User.create({
-    email: req.body.email,
-    password: hashedPassword,
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-  });
-
-  const userId = user._id;
-
-  await Account.create({
-    userId,
-    balance: Math.round((1 + Math.random() * 10000) * 100) / 100,
-  });
-
-  const token = jwt.sign(
-    {
-      userId,
-    },
-    JWT_SECRET
-  );
-
-  res.json({
-    message: "user created successfully",
-    token: token,
-  });
 });
 
 const signinBody = zod.object({
